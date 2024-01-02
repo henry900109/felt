@@ -21,7 +21,6 @@ def main(page : ft.Page):
         number_textbox,
         ft.IconButton(ft.icons.ADD, on_click=plus_click)
     ],alignment=ft.MainAxisAlignment.CENTER))
-    # page.add(ft.icons.)
 
 
 # ft.app(target=main, view=ft.)
