@@ -133,4 +133,4 @@ def main(page: ft.Page):
     page.add(people,tb,bn1,t)
 
 
-ft.app(target=main, view=None)
+ft.app(target=main, view=ft.WEB_BROWSER,port=5001)
