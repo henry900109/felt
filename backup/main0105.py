@@ -4,19 +4,10 @@ from icecream import ic
 def main(page: ft.Page):
     page.title = "Routes Example"
     table = ["","",""]
-    waring = ft.Text("",color=ft.colors.RED) 
+    waring = ft.Text("") 
     page.session.set("waring", waring)
     page.session.set("table", table)
-    temp = ft.Container()
 
-    def namelist(e):
-        # global temp
-        ic(people.value)
-        
-        temp = ft.Container(
-            content=ft.Column([ft.Text("p")for i in range(5)])
-        )
-        page.update()
 
     def button1_clicked(e):
         """
@@ -67,8 +58,8 @@ def main(page: ft.Page):
         data = page.session.get("data")
         if option_textbox.value == "" and number_textbox.value == "":
             pass
-        elif not (option_textbox.value.isdigit()) or number_textbox.value == "" or  option_textbox.value == "" or d.value == "": #type(int(option_textbox.value)) != type(1) or 
-            ic(number_textbox.value.isdigit())
+        elif number_textbox.value == "" or  option_textbox.value == "" or d.value == "": #type(int(option_textbox.value)) != type(1) or 
+            ic("i'm here!")
             waring.value = "請輸入正確資訊"
         else:
             table = page.session.get("table")
@@ -89,10 +80,8 @@ def main(page: ft.Page):
         global number_textbox,option_textbox,texttable
         number_textbox.value = ""
         option_textbox.value = ""
-        texttable.value = "\n".join([f"{table[0]} Buy {table[1]} cost {table[2]}" ])#for i in range(0, len(table), 3)
+        # texttable.value = "\n".join([f"{table[0]} Buy {table[1]} cost {table[2]}" for i in range(0, len(table), 3)])
         # failed
-        ic(table)
-        ic(texttable.value)
         page.go("/")
         page.go("/pay")
         page.session.set("waring", waring)
@@ -115,9 +104,8 @@ def main(page: ft.Page):
         page.views.clear()
         global tb,people
         waring = page.session.get("waring")
-        table = page.session.get("table")
         #定義 people(下拉式選單) 與 tb(文字框) 物件
-        people = ft.Dropdown(label="人數", options=[ft.dropdown.Option(str(i)) for i in range(2,10)],on_change=lambda e: namelist(e))
+        people = ft.Dropdown(label="人數", options=[ft.dropdown.Option(str(i)) for i in range(2,10)])
         tb = ft.TextField(
                         label="請輸入人名",
                         hint_text="Name1\nName2",
@@ -125,23 +113,14 @@ def main(page: ft.Page):
                         filled=True,
                         min_lines=0,
                         max_lines=10)
-        MainContainer = ft.Container(
-            width=400,
-            height=850,
-            content=ft.Column([
-                people,tb,waring,
-                ft.ElevatedButton(text="Submit", on_click=button1_clicked)])#當按鈕按下時觸發   
-            
-        )
-
-
         #將 control 依序加入 page.views
         page.views.append(
             ft.View(
                 "/",
                 [
-                    ft.AppBar(title=ft.Text("Flet app"), bgcolor=ft.colors.SURFACE_VARIANT),#標題
-                    MainContainer,temp                 
+                    ft.AppBar(title=ft.Text("Flet app"), bgcolor=ft.colors.SURFACE_VARIANT), #標題
+                    people,tb,waring,
+                    ft.ElevatedButton(text="Submit",on_click=button1_clicked) #當按鈕按下時觸發                   
                 ],
             )
         )
@@ -150,15 +129,36 @@ def main(page: ft.Page):
         if page.route == "/pay":
             global d,number_textbox,option_textbox,texttable
 
+            # keys = page.session.get_keys()
+            # for key in keys:
+            #     value = page.session.get(key)
+            #     ic(key,value)
+
+
             #導入 session 內容
             num = page.session.get("num")
             name = page.session.get("name")
-            
+            table = page.session.get("table")
             # waring = page.session.get("waring")
             #定義 d 姓名 (下拉式選單)  number_textbox 輸入品項名稱 (文字框) option_textbox 金額 (文字框)
             d = ft.Dropdown(label="人名", options = [ft.dropdown.Option(f"{name[i]}") for i in range(int(num))])
             
-            
+            # item_list = ft.DataTable(
+            #                         columns=[
+            #                             ft.DataColumn(ft.Text("name"),ft.DataColumn(ft.Text("品項")),ft.DataColumn(ft.Text("金額")))
+            #                         ],
+            #                         rows=[
+            #                             ft.DataRow(
+            #                                 cells=[
+            #                                     ft.DataCell(ft.Text(table[0])),
+            #                                     ft.DataCell(ft.Text(table[1])),
+            #                                     ft.DataCell(ft.Text(table[2]))
+            #                                 ]
+            #                             )
+            #                               # 步长为3，每三个元素为一行
+            #                         ],
+            #                     )
+            table = ["p","p","p","p","p","p","p","p","p","p","p","p"]
             text_lines = "\n".join([f"{table[i]} Buy {table[i + 1]} cost {table[i + 2]}" for i in range(0, len(table), 3)])
             texttable = ft.TextField(value=text_lines, read_only=True,multiline=True)
 
@@ -215,4 +215,4 @@ def main(page: ft.Page):
     page.go(page.route)
     
 #Let's go...
-ft.app(target=main, view=ft.AppView.WEB_BROWSER,port=5555)
+ft.app(target=main, view=ft.AppView.WEB_BROWSER)
