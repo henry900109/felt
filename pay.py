@@ -45,7 +45,7 @@ def result(person,pay):
         result += f"{person_key}\n"
         for p,item in person[person_key].items():
             if item > 0:
-                result += f"需給 {p} : {item}元\n"
+                result += f"需給 {p} : {abs(item)}元\n"
             elif item < 0:
                 result += f"跟 {p} 拿 : {item}元\n"
 
